@@ -17,3 +17,10 @@ gulp.task('sass', function() {
 		.pipe(sass())
 		.pipe(gulp.dest('app/css'))
 });
+
+// 提供watch监听文件变化,这是单个监听的写法，如果想添加多个监听，可以使用watch task
+// gulp.watch('app/scss/**/*.scss', ['sass']);
+
+gulp.task('watch', function() {
+	gulp.watch('app/scss/**/*.scss', ['sass']);
+});
