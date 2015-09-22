@@ -6,7 +6,12 @@ var sass = require('gulp-sass');
 var browsersync = require('browser-sync');
 // 合并js文件
 var useref = require('gulp-useref');
-
+// 判断
+var gulpIf = require('gulp-if');
+// 压缩代码
+var uglify = require('gulp-uglify');
+// 压缩css
+var minifyCSS = require('gulp-minify-css');
 /**
  * 编写第一个task
  * 运行: gulp hello
@@ -48,6 +53,11 @@ gulp.task('useref', function() {
 	var assets = useref.assets();
 	return gulp.src('app/*.html')
 		.pipe(assets)
+		// 判断是否是css文件
+		.pipe(gulpIf('*.css', minifyCSS()))
+		// 判断是否是js文件
+		.pipe(gulpIf('*.js', uglify()))
+		// .pipe(uglify()) //压缩代码
 		.pipe(assets.restore())
 		.pipe(useref())
 		.pipe(gulp.dest('dist'))
