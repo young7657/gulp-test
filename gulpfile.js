@@ -4,6 +4,8 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 // 实时刷新
 var browsersync = require('browser-sync');
+// 合并js文件
+var useref = require('gulp-useref');
 
 /**
  * 编写第一个task
@@ -39,4 +41,14 @@ gulp.task('browsersync', function() {
 			baseDir: 'app'
 		}
 	});
+});
+
+// 合并js
+gulp.task('useref', function() {
+	var assets = useref.assets();
+	return gulp.src('app/*.html')
+		.pipe(assets)
+		.pipe(assets.restore())
+		.pipe(useref())
+		.pipe(gulp.dest('dist'))
 });
