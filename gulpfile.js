@@ -2,6 +2,8 @@
 var gulp = require('gulp');
 // sass编译
 var sass = require('gulp-sass');
+// 实时刷新
+var browsersync = require('browser-sync');
 
 /**
  * 编写第一个task
@@ -16,11 +18,23 @@ gulp.task('sass', function() {
 	return gulp.src('app/scss/**/*.scss')
 		.pipe(sass())
 		.pipe(gulp.dest('app/css'))
+		.pipe(browsersync.reload({
+			stream: true
+		}))
 });
 
 // 提供watch监听文件变化,这是单个监听的写法，如果想添加多个监听，可以使用watch task
 // gulp.watch('app/scss/**/*.scss', ['sass']);
-
-gulp.task('watch', function() {
+// 添加依赖参数
+gulp.task('watch', ['browsersync', 'sass'], function() {
 	gulp.watch('app/scss/**/*.scss', ['sass']);
+});
+
+// gulp还有一个强大的功能叫做live-reloading，实时刷新网页
+gulp.task('browsersync', function() {
+	browsersync({
+		server: {
+			baseDir: 'app'
+		}
+	});
 });
