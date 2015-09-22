@@ -28,6 +28,8 @@ gulp.task('sass', function() {
 // 添加依赖参数
 gulp.task('watch', ['browsersync', 'sass'], function() {
 	gulp.watch('app/scss/**/*.scss', ['sass']);
+	gulp.watch('app/*.html', browsersync.reload);
+	gulp.watch('app/js/**/*.js', browsersync.reload);
 });
 
 // gulp还有一个强大的功能叫做live-reloading，实时刷新网页
