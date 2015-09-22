@@ -16,6 +16,11 @@ var minifycss = require('gulp-minify-css');
 var imagemin = require('gulp-imagemin');
 // 缓存
 var cache = require('gulp-cache');
+// 清除
+var del = require('del');
+// 顺序执行
+var runsequence = require('run-sequence');
+
 /**
  * 编写第一个task
  * 运行: gulp hello
@@ -78,4 +83,24 @@ gulp.task('images', function() {
 gulp.task('fonts', function() {
 	return gulp.src('app/fonts/**/*')
 		.pipe(gulp.dest('dist/fonts'))
+});
+
+gulp.task('clean:dist', function(callback) {
+	del(['dist/**/*', '!dist/images', '!dist/images/**/*'], callback);
+});
+
+gulp.task('clean', function(callback) {
+  del('dist');
+  return cache.clearAll(callback);
+});
+
+gulp.task('build', function(callback) {
+	runsequence('clean:dist',
+		['sass', 'useref', 'images', 'fonts'],
+		callback
+	)
+});
+// 顺序执行参数的task,数组内的是task是异步执行
+gulp.task('default', function(callback) {
+	runsequence(['sass', 'browsersync', 'watch'], callback)
 });
