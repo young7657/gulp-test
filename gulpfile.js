@@ -13,7 +13,7 @@ gulp.task('hello', function() {
 
 // 接下来使用gulp编译scss文件
 gulp.task('sass', function() {
-	return gulp.src('app/scss/styles.scss')
+	return gulp.src('app/scss/**/*.scss')
 		.pipe(sass())
 		.pipe(gulp.dest('app/css'))
 });
