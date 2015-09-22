@@ -11,7 +11,11 @@ var gulpIf = require('gulp-if');
 // 压缩代码
 var uglify = require('gulp-uglify');
 // 压缩css
-var minifyCSS = require('gulp-minify-css');
+var minifycss = require('gulp-minify-css');
+// 压缩图片
+var imagemin = require('gulp-imagemin');
+// 缓存
+var cache = require('gulp-cache');
 /**
  * 编写第一个task
  * 运行: gulp hello
@@ -54,11 +58,24 @@ gulp.task('useref', function() {
 	return gulp.src('app/*.html')
 		.pipe(assets)
 		// 判断是否是css文件
-		.pipe(gulpIf('*.css', minifyCSS()))
+		.pipe(gulpIf('*.css', minifycss()))
 		// 判断是否是js文件
 		.pipe(gulpIf('*.js', uglify()))
 		// .pipe(uglify()) //压缩代码
 		.pipe(assets.restore())
 		.pipe(useref())
 		.pipe(gulp.dest('dist'))
+});
+// 让我们开始压缩图片
+gulp.task('images', function() {
+	return gulp.src('app/images/**/*.+(png|jpg|gif|svg)')
+		.pipe(cache(imagemin({
+			interlaced: true
+		})))
+		.pipe(gulp.dest('dist/images'))
+});
+
+gulp.task('fonts', function() {
+	return gulp.src('app/fonts/**/*')
+		.pipe(gulp.dest('dist/fonts'))
 });
